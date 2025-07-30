@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import RaisedMan from "./RaisedMan";
 import Alphabets from "./Alphabets";
-import wordPool from "../word_pool";
 import GameOver from "./GameOver";
 
 const GamePlay = ({ mode }) => {
