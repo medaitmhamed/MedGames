@@ -8,7 +8,6 @@ const GamePlay = ({ mode }) => {
   const [subject, setSubject] = useState("");
   const [gameOver, setGameOver] = useState(false);
   const [win, setWin] = useState(false);
-  // const [wordToGuess, setWordToGuess] = useState("");
   const [guessedLetters, setGuessedLetters] = useState([]);
   const [wrongGuesses, setWrongGuesses] = useState(0);
 
@@ -24,23 +23,6 @@ const GamePlay = ({ mode }) => {
     }
   };
 
-  // useEffect(() => {
-  //   setMode(mode);
-
-  //   const fetchWord = async () => {
-  //     try {
-  //       const response = await fetch("/api/word-pool"); // or full URL if needed
-  //       const data = await response.json();
-
-  //       const randomWord = data[Math.floor(Math.random() * data.length)];
-  //       setWordToGuess(randomWord.word.toUpperCase());
-  //       setSubject(randomWord.category);
-  //     } catch (error) {
-  //       console.error("Failed to fetch word pool:", error);
-  //     }
-  //   };
-  //   fetchWord();
-  // }, [mode]);
 
   useEffect(() => {
     setMode(mode);
