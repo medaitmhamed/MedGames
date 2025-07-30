@@ -19,7 +19,7 @@ function App() {
           <Route path="/best-game" element={<Home filterType="best games" />} />
           <Route path="/newest" element={<Home filterType="new games" />} />
           <Route path="/categories" element={<ComingSoon />} />
-        
+          
           <Route path="/hangman" element={<HangmanLayout />}>
             <Route index element={<PlayModes />} />
             <Route path="beginner" element={<GamePlay mode="easy" />} />
