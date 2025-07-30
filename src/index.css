@@ -2,6 +2,22 @@
 
 @theme {
  --font-Knewave: "Knewave", system-ui;
+ --font-luckiest: "Luckiest Guy", system-ui;
+ --color-primary: #0891B2;
+ --color-active: #18b5dc;
+ --color-dark: #242424;
+ --font-knewave: "Knewave", system-ui;
+}
+
+@layer utilities {
+  .text-stroke {
+    -webkit-text-stroke: 1px white;
+  }
+
+  .text-stroke-2 {
+    -webkit-text-stroke: 2px white;
+    color: #18b5dc;
+  }
 }
 
 :root {
