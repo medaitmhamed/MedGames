@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import RaisedMan from "./RaisedMan";
 import Alphabets from "./Alphabets";
 import GameOver from "./GameOver";
@@ -8,9 +8,11 @@ const GamePlay = ({ mode }) => {
   const [subject, setSubject] = useState("");
   const [gameOver, setGameOver] = useState(false);
   const [win, setWin] = useState(false);
-  const [wordToGuess, setWordToGuess] = useState("");
+  // const [wordToGuess, setWordToGuess] = useState("");
   const [guessedLetters, setGuessedLetters] = useState([]);
   const [wrongGuesses, setWrongGuesses] = useState(0);
+
+  const wordToGuess = useRef("");
 
   const setMode = (mode) => {
     if (mode === "easy") {
@@ -22,30 +24,49 @@ const GamePlay = ({ mode }) => {
     }
   };
 
+  // useEffect(() => {
+  //   setMode(mode);
+
+  //   const fetchWord = async () => {
+  //     try {
+  //       const response = await fetch("/api/word-pool"); // or full URL if needed
+  //       const data = await response.json();
+
+  //       const randomWord = data[Math.floor(Math.random() * data.length)];
+  //       setWordToGuess(randomWord.word.toUpperCase());
+  //       setSubject(randomWord.category);
+  //     } catch (error) {
+  //       console.error("Failed to fetch word pool:", error);
+  //     }
+  //   };
+  //   fetchWord();
+  // }, [mode]);
+
   useEffect(() => {
     setMode(mode);
-
     const fetchWord = async () => {
       try {
-        const response = await fetch("/api/word-pool"); // or full URL if needed
+        const response = await fetch("/api/word-pool");
         const data = await response.json();
 
         const randomWord = data[Math.floor(Math.random() * data.length)];
-        setWordToGuess(randomWord.word.toUpperCase());
+        wordToGuess.current = randomWord.word.toUpperCase();
         setSubject(randomWord.category);
       } catch (error) {
         console.error("Failed to fetch word pool:", error);
       }
+
+      console.log();
+      
     };
     fetchWord();
   }, [mode]);
-
 
   const getLetterFromAlphabets = (letter) => {
     if (!guessedLetters.includes(letter)) {
       setGuessedLetters((prev) => [...prev, letter]);
 
-      if (!wordToGuess.includes(letter)) {
+      if (!wordToGuess.current.includes(letter)) {
         setWrongGuesses((prev) => prev + 1);
       }
     }
@@ -53,7 +74,7 @@ const GamePlay = ({ mode }) => {
 
   useEffect(() => {
     const isGuessedRight = () => {
-      const uniqueLetters = [...new Set(wordToGuess.split(""))];
+      const uniqueLetters = [...new Set(wordToGuess.current.split(""))];
       if (uniqueLetters.length > 0) {
         return uniqueLetters.every((letter) => guessedLetters.includes(letter));
       }
@@ -86,7 +107,7 @@ const GamePlay = ({ mode }) => {
               {subject}
             </h2>
             <div className="word mt-5 mb-14 md:my-10 w-full flex justify-center items-center text-xl gap-x-2">
-              {wordToGuess.split("").map((letter, i) => {
+              {wordToGuess.current.split("").map((letter, i) => {
                 const isSpace = letter === " ";
                 return (
                   <span
