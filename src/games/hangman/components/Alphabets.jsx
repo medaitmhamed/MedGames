@@ -44,7 +44,7 @@ const Alphabets = ({ guessedLetters, handleClick }) => {
           );
         })}
       </div>
-      <p className="text-sm text-gray-400 mt-2">
+      <p className="hidden lg: block text-sm text-gray-400 my-3 font-sans font-semibold">
         💡 <span className="italic">Tip :</span> You can also use your keyboard
         to guess letters!
       </p>

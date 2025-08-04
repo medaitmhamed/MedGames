@@ -76,7 +76,7 @@ const GamePlay = ({ mode }) => {
   }
   return (
     <div>
-      <div className="w-full flex flex-col md:flex-row items-center justify-between gap-2 md:gap-20">
+      <div className="w-full flex flex-col md:flex-row items-center justify-between gap-2 md:gap-20 font-[knewave]">
         <div className="w-full h-74 md:h-auto overflow-hidden rounded-md order-1 md:order-2">
           <RaisedMan balloonCount={lives} wrongGuesses={wrongGuesses} />
         </div>
@@ -87,7 +87,7 @@ const GamePlay = ({ mode }) => {
             </h2>
             <div className="word mt-5 mb-14 md:my-10 w-full flex justify-center items-center text-xl gap-x-2">
               {wordToGuess == null ?
-              <p className="font-poppins animate-pulse">wait for word....</p> :
+              <p className="h-11 font-poppins animate-pulse">wait for word....</p> :
                wordToGuess.split("").map((letter, i) => {
                 const isSpace = letter === " ";
                 return (
