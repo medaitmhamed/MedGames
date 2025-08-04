@@ -10,7 +10,6 @@ import ComingSoon from "./pages/ComingSoon";
 import XOLayout from "./games/tic tac toe/XOLayout";
 import GameModes from "./games/tic tac toe/components/GameModes";
 import TicTacToeBackground from "./games/tic tac toe/components/TicTacToeBackground";
-import PlayersNumber from "./games/tic tac toe/components/PlayersNumber";
 import OnePlayer from "./games/tic tac toe/components/OnePlayer";
 import TowPlayers from "./games/tic tac toe/components/TowPlayers";
 import Board from "./games/tic tac toe/components/Board";
@@ -27,7 +26,6 @@ function App() {
           <Route path="/best-game" element={<Home filterType="best games" />} />
           <Route path="/newest" element={<Home filterType="new games" />} />
           <Route path="/categories" element={<ComingSoon />} />
-          <Route path="/bg" element={<TicTacToeBackground />} />
 
           <Route path="/hangman" element={<HangmanLayout />}>
             <Route index element={<PlayModes />} />
