@@ -1,12 +1,14 @@
 @import "tailwindcss";
 
 @theme {
- --font-Knewave: "Knewave", system-ui;
- --font-luckiest: "Luckiest Guy", system-ui;
- --color-primary: #0891B2;
- --color-active: #18b5dc;
- --color-dark: #242424;
- --font-knewave: "Knewave", system-ui;
+  /* breake points */
+  --breakpoint-xs: 20rem;
+  /* other properties */
+  --font-Knewave: "Knewave", system-ui;
+  --font-luckiest: "Luckiest Guy", system-ui;
+  --color-primary: #0891b2;
+  --color-active: #18b5dc;
+  --color-dark: #242424;
 }
 
 @layer utilities {
@@ -23,7 +25,7 @@
 :root {
   line-height: 1.5;
   font-weight: 400;
-  font-family: "Poppins",system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Poppins", system-ui, Avenir, Helvetica, Arial, sans-serif;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;

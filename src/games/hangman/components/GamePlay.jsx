@@ -8,7 +8,7 @@ const GamePlay = ({ mode }) => {
   const [subject, setSubject] = useState("");
   const [gameOver, setGameOver] = useState(false);
   const [win, setWin] = useState(false);
-  const [wordToGuess, setWordToGuess] = useState("");
+  const [wordToGuess, setWordToGuess] = useState(null);
   const [guessedLetters, setGuessedLetters] = useState([]);
   const [wrongGuesses, setWrongGuesses] = useState(0);
 
@@ -53,7 +53,7 @@ const GamePlay = ({ mode }) => {
 
   useEffect(() => {
     const isGuessedRight = () => {
-      const uniqueLetters = [...new Set(wordToGuess.split(""))];
+      const uniqueLetters = wordToGuess == null ? [] :[...new Set(wordToGuess.split(""))];
       if (uniqueLetters.length > 0) {
         return uniqueLetters.every((letter) => guessedLetters.includes(letter));
       }
@@ -86,7 +86,9 @@ const GamePlay = ({ mode }) => {
               {subject}
             </h2>
             <div className="word mt-5 mb-14 md:my-10 w-full flex justify-center items-center text-xl gap-x-2">
-              {wordToGuess.split("").map((letter, i) => {
+              {wordToGuess == null ?
+              <p className="font-poppins animate-pulse">wait for word....</p> :
+               wordToGuess.split("").map((letter, i) => {
                 const isSpace = letter === " ";
                 return (
                   <span

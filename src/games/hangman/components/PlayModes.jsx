@@ -1,12 +1,12 @@
 
 import { Link } from "react-router-dom";
-import bg_hangman from "../../../assets/images/hangman-bg.png";
+import bg from "../../../assets/images/games/hangman/bg.png";
 const PlayModes = () => {
   return (
     <div className="w-full min-h-[70svh] md:min-h-auto flex flex-col font-[poppins]">
     <div className="absolute top-0 left-0 w-full h-svh z-0 bg-gray-800">
       <div className="absolute top-0 left-0 w-full h-full  bg-gradient-to-b from-gray-950/97 to-gray-900/80"></div>
-      <img src={bg_hangman} alt="" className="w-full h-full object-cover"/>
+      <img src={bg} alt="" className="w-full h-full object-cover"/>
     </div>
     <div className="relative w-full flex-1 flex flex-col items-center justify-center z-40">
      

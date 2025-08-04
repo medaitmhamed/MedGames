@@ -1,5 +1,6 @@
 import GameCard from "./GameCard";
-import hangMan from "../assets/images/hangman-bg.png";
+import hangMan from "../assets/images/games/hangman/bg.png";
+import xo_tumbnail from "../assets/images/games/tic tac toe/tumbnail.png"
 import { useEffect, useState } from "react";
 const GameList = () => {
   const [games, setGames] = useState([
@@ -13,6 +14,17 @@ const GameList = () => {
       ratesCount: 100,
       playingCount: 2000,
       path: "/hangman",
+    },
+    {
+      id: 2,
+      title: "Tic-Tac-Toe (XO)",
+      description: "Challenge your mind and play (XO) game",
+      image: xo_tumbnail,
+      isFavorite: false,
+      rating: 4,
+      ratesCount: 56,
+      playingCount: 1245,
+      path: "/tic-tac-toe",
     },
   ]);
 
