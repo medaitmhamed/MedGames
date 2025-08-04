@@ -10,7 +10,6 @@ import ComingSoon from "./pages/ComingSoon";
 import XOLayout from "./games/tic tac toe/XOLayout";
 import GameModes from "./games/tic tac toe/components/GameModes";
 import OnePlayer from "./games/tic tac toe/components/OnePlayer";
-import TowPlayers from "./games/tic tac toe/components/TowPlayers";
 import Board from "./games/tic tac toe/components/Board";
 import Nour from "./games/hangman/components/Nour";
 const Home = lazy(() => import("./pages/Home"));
@@ -38,8 +37,6 @@ function App() {
             <Route index element={<GameModes />} />
             <Route path="play_with_friend" element={<Board mode="2p"/>} />
             <Route path="single-player" element={<OnePlayer />} >
-            </Route>
-            <Route path="two-players" element={<TowPlayers />}>
             </Route>
           </Route>
           <Route path="*" element={<NoPage />} />
