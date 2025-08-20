@@ -176,7 +176,7 @@ const GuessNbrGamePlay = () => {
       className="w-full flex flex-col items-center gap-[7vw] text-white
     md:flex-row md:items-start"
     >
-      <div className="max-w-sm bg-gray-800 rounded-lg text-sm overflow-hidden">
+      <div className="hidden md:block max-w-sm bg-gray-800 rounded-lg text-sm overflow-hidden">
         <p className="p-4 text-gray-200">
           <h4 className="font-semibold mb-2">Rules & Color Legend:</h4>
           <div className="mb-3 p-2 bg-yellow-900 rounded text-yellow-200">
@@ -200,7 +200,7 @@ const GuessNbrGamePlay = () => {
         </p>
       </div>
       <div className="w-full max-w-md h-fit">
-        <div className="w-full h-fit flex">
+        <div className="w-full h-fit">
           <div className="md:hidden w-full flex gap-x-2 mb-2">
             <button
               type="button"
