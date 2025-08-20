@@ -12,7 +12,7 @@ import GameModes from "./games/tic tac toe/components/GameModes";
 import Board from "./games/tic tac toe/components/Board";
 import Nour from "./games/hangman/components/Nour";
 import GuessNumberLayout from "./games/guessMyNumber/GuessNumberLayout";
-import GuessNbrGamePlay from "./games/guessMyNumber/components/guessNbrGamePlay";
+import GuessNbrGamePlay from "./games/guessMyNumber/components/GuessNbrGamePlay";
 const Home = lazy(() => import("./pages/Home"));
 
 function App() {
