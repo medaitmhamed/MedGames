@@ -1,13 +1,11 @@
 import { useEffect } from "react";
 
-const Alphabets = ({ guessedLetters, handleClick }) => {
+const Alphabets = ({ guessedLetters, getLetter }) => {
   const letters = Array.from({ length: 26 }, (_, i) =>
     String.fromCharCode(65 + i)
   );
 
-  const getLetter = (letter) => {
-    handleClick(letter);
-  };
+ 
 
   // Handle key press
   useEffect(() => {
@@ -16,13 +14,13 @@ const Alphabets = ({ guessedLetters, handleClick }) => {
 
       // If key is A-Z and not guessed
       if (/^[A-Z]$/.test(key) && !guessedLetters.includes(key)) {
-        handleClick(key);
+        getLetter(key);
       }
     };
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [guessedLetters, handleClick]); // Make sure the latest guessedLetters are tracked
+  }, [guessedLetters, getLetter]); // Make sure the latest guessedLetters are tracked
 
   return (
     <>

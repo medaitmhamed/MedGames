@@ -6,13 +6,10 @@ const GameCard = ({ game, addToFavorites }) => {
   const handleAddToFavorites = () => {
     addToFavorites(game.id);
   };
-
   return (
     <div className="rounded-lg border p-6 shadow-sm border-gray-700 bg-gray-800">
       <div className="h-56 w-full">
-        <a href="#">
-          <img className="mx-auto h-full" src={game.image} alt="" />
-        </a>
+          <img className="mx-auto h-full" src={game.image} alt={game.title} />
       </div>
       <div className="pt-6">
         <div className="mb-4 flex items-center justify-between gap-4">
@@ -22,7 +19,7 @@ const GameCard = ({ game, addToFavorites }) => {
           <button
             type="button"
             onClick={handleAddToFavorites}
-            className="group relative flex items-center justify-between  rounded-lg text-sm p-2 w-44 h-8  text-white cursor-pointer"
+            className="group relative flex items-center justify-between text-sm p-2 w-44 h-8  text-white cursor-pointer"
           >
             <AnimatePresence mode="wait">
               {game.isFavorite ? (
@@ -60,12 +57,11 @@ const GameCard = ({ game, addToFavorites }) => {
           </button>
         </div>
 
-        <a
-          href="#"
-          className="text-lg font-semibold leading-tight hover:underline text-white"
+        <h3
+          className="text-lg font-semibold leading-tight text-white"
         >
           {game.title}
-        </a>
+        </h3>
         <div className="mt-2 mb-4 flex items-center gap-2">
           <div className="flex items-center">
             {Array.from({ length: 5 }, (_, index) => {

@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  /* breake points */
-  --breakpoint-xs: 20rem;
+  /* break points */
+  --breakpoint-xxs: 20rem;
+  --breakpoint-xs: 23rem; 
   /* other properties */
   --font-Knewave: "Knewave", system-ui;
   --font-luckiest: "Luckiest Guy", system-ui;

@@ -1,68 +1,229 @@
 import { User } from "lucide-react";
-import { useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import GameOver from "./GameOver";
+import { Navigate, useLocation } from "react-router-dom";
+import useLocalStorage from "../../../Hooks/useLocalStorage";
+const Board = () => {
+  const { state } = useLocation();
+    // stop direct access 
 
-const Board = ({ mode }) => {
+    const { mode, difficulty, players, whoStart } = state || {};
+    const [player1, player2] = players || [];
+    const [board, setBoard] = useState(Array(9).fill(""));
+    const [startingPlayer, setStartingPlayer] = useState(whoStart);
+    const [currentPlayer, setCurrentPlayer] = useState(startingPlayer);
+    const [winner, setWinner] = useState(null);
+    const [gameOver, setGameOver] = useState(false);
+    const [winningLine, setWinningLine] = useState([]);
+    const [gameCount, setGameCount] = useState(0);
+    const [scores, setScores] = useLocalStorage("scores", {
+      X: 0,
+      O: 0,
+      draws: 0,
+    });
+    if (!state){return <Navigate to="/tic-tac-toe" replace/>}
 
-//   const modes = {
-//   TWO_PLAYER: "2p",
-//   VS_COMPUTER: "cpu",
-//   ONLINE: "online",
-// };
+  const p1Score = scores?.[player1?.symbol] ?? 0;
+  const p2Score = scores?.[player2?.symbol] ?? 0;
 
+  const WINNING_COMBINATIONS = [
+  [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+  [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+  [0, 4, 8], [2, 4, 6]             // diagonals
+];
 
-  const [board, setBoard] = useState(Array(9).fill(""));
-  const [startingPlayer, setStartingPlayer] = useState("X");
-  const [currentPlayer, setCurrentPlayer] = useState(startingPlayer);
-  const [winner, setWinner] = useState(null);
-  const [gameOver, setGameOver] = useState(false);
-  const [scores, setScores] = useState({ X: 0, O: 0, draws: 0 });
-  const [winningLine, setWinningLine] = useState([]);
-  const [gameCount, setGameCount] = useState(0);
-
-  // Winning combinations
-  const winningCombinations = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8], // Rows
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8], // Columns
-    [0, 4, 8],
-    [2, 4, 6], // Diagonals
-  ];
   useEffect(() => {
     setCurrentPlayer(startingPlayer);
-  }, [startingPlayer, gameCount]);
+  }, [startingPlayer]);
 
-  // Check for winner
   useEffect(() => {
-    checkWinner();
-  }, [board]);
+    if (
+      mode === "cpu" &&
+      currentPlayer === player2.symbol &&
+      !gameOver &&
+      winner === null
+    ) {
+      const emptyCells = board
+        .map((cell, index) => (cell === "" ? index : null))
+        .filter((index) => index !== null);
+      let rebotMove = null;
+      if (emptyCells.length > 0) {
+        const randomMove =
+          emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        if (difficulty === "easy") {
+          rebotMove = randomMove;
+        } else if (difficulty === "normal") {
+          // Simple AI: try to win, then block, then random
+          rebotMove =
+            findBestMove(board, player2.symbol, player1.symbol) || randomMove;
+        } else if (difficulty === "hard") {
+          rebotMove = bestMoveMinimax(board, player2.symbol, player1.symbol);
+        }
+        // Small delay for realism
+        const timer = setTimeout(() => {
+          makeMove(rebotMove);
+        }, 700);
 
-  const checkWinner = () => {
-    for (let combination of winningCombinations) {
-      // [ 0 , 1 , 2 ]
-      const [a, b, c] = combination; // [0 1 2]
-      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-        setWinner(board[a]);
-        setWinningLine(combination);
-        setTimeout(() => {
-          setGameOver(true);
-        }, 500);
-        setScores((prev) => ({
-          ...prev,
-          [board[a]]: prev[board[a]] + 1,
-        }));
-        return;
+        return () => clearTimeout(timer); // cleanup
       }
     }
+  }, [board, currentPlayer, mode, gameOver, winner, player2.symbol]);
 
-    // Check for draw
-    if (board.every((cell) => cell !== "") && !winner) {
-      setWinner("draw");
-      setGameOver(true);
+  // Simple AI logic
+  const findBestMove = (board, aiSymbol, playerSymbol) => {
+
+    // Try to win
+    for (let combo of WINNING_COMBINATIONS) {
+      const [a, b, c] = combo;
+      if (board[a] === aiSymbol && board[b] === aiSymbol && board[c] === "")
+        return c;
+      if (board[a] === aiSymbol && board[c] === aiSymbol && board[b] === "")
+        return b;
+      if (board[b] === aiSymbol && board[c] === aiSymbol && board[a] === "")
+        return a;
     }
+
+    // Try to block player
+    for (let combo of WINNING_COMBINATIONS) {
+      const [a, b, c] = combo;
+      if (
+        board[a] === playerSymbol &&
+        board[b] === playerSymbol &&
+        board[c] === ""
+      )
+        return c;
+      if (
+        board[a] === playerSymbol &&
+        board[c] === playerSymbol &&
+        board[b] === ""
+      )
+        return b;
+      if (
+        board[b] === playerSymbol &&
+        board[c] === playerSymbol &&
+        board[a] === ""
+      )
+        return a;
+    }
+
+    // Take center if available
+    if (board[4] === "") return 4;
+
+    // Take corners
+    const corners = [0, 2, 6, 8];
+    const availableCorners = corners.filter((i) => board[i] === "");
+    if (availableCorners.length > 0) {
+      return availableCorners[
+        Math.floor(Math.random() * availableCorners.length)
+      ];
+    }
+
+    return null;
+  };
+
+  // Check for winner
+useEffect(() => {
+  const winnerData = checkGameResult(board, players, true);
+
+  if (winnerData) {
+    const { result, combination } = winnerData;
+
+    if (result !== "draw") {
+      const winnerPlayer = players.find((p) => p.symbol === result);
+      setWinner(winnerPlayer);
+      setWinningLine(combination); 
+      setScores((prev) => ({ ...prev, [result]: prev[result] + 1 }));
+      setTimeout(() => setGameOver(true), 500);
+    } else {
+      setWinner("draw");
+      setTimeout(() => setGameOver(true), 500);
+    }
+  }
+}, [board, players]);
+
+
+  const checkGameResult = (board, players, withCombination = false) => {
+  // Check for winner
+  for (const combo of WINNING_COMBINATIONS) {
+    const [a, b, c] = combo;
+    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+      const winnerSymbol = board[a];
+      const winnerPlayer = players?.find(p => p.symbol === winnerSymbol);
+      const result = winnerPlayer?.symbol || winnerSymbol;
+      
+      return withCombination 
+        ? { result, combination: combo }
+        : result;
+    }
+  }
+  
+  // Check for draw
+  if (board.every(cell => cell !== "")) {
+    return withCombination
+      ? { result: "draw", combination: [] }
+      : "draw";
+  }
+  
+  return null;
+};
+
+
+  const minimax = (newBoard, depth, isMaximizing, aiSymbol, humanSymbol) => {
+    const result = checkGameResult(newBoard, [
+      { symbol: aiSymbol },
+      { symbol: humanSymbol },
+    ]);
+
+    if (result === aiSymbol) return 10 - depth;
+    if (result === humanSymbol) return depth - 10;
+    if (result === "draw") return 0;
+
+    if (isMaximizing) {
+      let bestScore = -Infinity;
+      for (let i = 0; i < newBoard.length; i++) {
+        if (newBoard[i] === "") {
+          newBoard[i] = aiSymbol;
+          let score = minimax(
+            newBoard,
+            depth + 1,
+            false,
+            aiSymbol,
+            humanSymbol
+          );
+          newBoard[i] = "";
+          bestScore = Math.max(score, bestScore);
+        }
+      }
+      return bestScore;
+    } else {
+      let bestScore = Infinity;
+      for (let i = 0; i < newBoard.length; i++) {
+        if (newBoard[i] === "") {
+          newBoard[i] = humanSymbol;
+          let score = minimax(newBoard, depth + 1, true, aiSymbol, humanSymbol);
+          newBoard[i] = "";
+          bestScore = Math.min(score, bestScore);
+        }
+      }
+      return bestScore;
+    }
+  };
+
+  const bestMoveMinimax = (board, aiSymbol, humanSymbol) => {
+    let bestScore = -Infinity;
+    let move;
+    for (let i = 0; i < board.length; i++) {
+      if (board[i] === "") {
+        board[i] = aiSymbol;
+        let score = minimax(board, 0, false, aiSymbol, humanSymbol);
+        board[i] = "";
+        if (score > bestScore) {
+          bestScore = score;
+          move = i;
+        }
+      }
+    }
+    return move;
   };
 
   const makeMove = (index) => {
@@ -85,7 +246,7 @@ const Board = ({ mode }) => {
 
   const getCellColor = (index) => {
     if (winningLine.includes(index)) {
-      return winner === "X"
+      return winner.symbol === player1.symbol
         ? "bg-blue-500/20 border-blue-400"
         : "bg-red-500/20 border-red-400";
     }
@@ -99,12 +260,20 @@ const Board = ({ mode }) => {
         md:w-1/4
         lg:w-1/5"
       >
-        <div className="w-full justify-items-center rounded-md text-lg text-center bg-sky-950/80 border border-sky-800 px-4 py-2">
+        <div
+          className={`${
+            currentPlayer === player1.symbol
+              ? "opacity-100 brightness-110"
+              : "opacity-50"
+          } w-full justify-items-center rounded-md text-lg text-center bg-sky-950/80 border border-sky-800 px-4 py-2`}
+        >
           <div className="flex items-start gap-x-2 mb-4">
             <User className="" />
-            <span className="font-semibold">Player X </span>
+            <span className="font-semibold capitalize">
+              {mode !== "2p" ? (player1.name || "you") : (player1.name || "player")} {player1.symbol}
+            </span>
           </div>
-          <span className="text-2xl font-medium">{scores.X}</span>
+          <span className="text-2xl font-medium">{p1Score}</span>
         </div>
       </div>
       <div
@@ -112,12 +281,20 @@ const Board = ({ mode }) => {
         md:w-1/4
         lg:w-1/5"
       >
-        <div className="w-full justify-items-center rounded-md text-lg text-center bg-red-950/80 border border-red-800 px-4 py-2">
+        <div
+          className={`${
+            currentPlayer === player2.symbol
+              ? "opacity-100 brightness-110"
+              : "opacity-50"
+          } w-full justify-items-center rounded-md text-lg text-center bg-red-950/80 border border-red-800 px-4 py-2`}
+        >
           <div className="flex items-start gap-x-2 mb-4">
             <User className="" />
-            <span className="font-semibold">Player O </span>
+            <span className="font-semibold">
+              {player2.name || "player"} {player2.symbol}
+            </span>
           </div>
-          <span className="text-2xl font-medium">{scores.O}</span>
+          <span className="text-2xl font-medium">{p2Score}</span>
         </div>
       </div>
       <div className="w-full mt-6 flex-1 flex justify-center items-start">
@@ -146,7 +323,9 @@ const Board = ({ mode }) => {
           })}
         </div>
       </div>
-      {gameOver && <GameOver winner={winner} resetGame={resetGame} />}
+      {gameOver && (
+        <GameOver mode={mode} winner={winner} p1={player1} resetGame={resetGame} />
+      )}
     </div>
   );
 };

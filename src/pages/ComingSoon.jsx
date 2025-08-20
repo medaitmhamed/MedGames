@@ -1,9 +1,9 @@
 import logo from "../assets/images/logo.png"
 
-const ComingSoon = () => {
+const ComingSoon = ({title}) => {
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black relative overflow-hidden">
+    <div className="w-full min-h-[calc(100svh - 79px)]  absolute top-0 left-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black overflow-hidden z-50">
       {/* Animated background elements */}
       <div className="absolute inset-0">
         {[...Array(15)].map((_, i) => (
@@ -28,11 +28,10 @@ const ComingSoon = () => {
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
         {/* Logo/Brand */}
         <div className="mb-8">
-            <img src={logo} alt="med games logo" className="w-20 mx-auto mb-2" />
-          <h1 className="text-4xl md:text-6xl font-bold text-active  mb-4">
-            Categories
+            <img src={logo} alt="med games logo" className="w-20 mx-auto mb-4" />
+          <h1 className="text-4xl md:text-6xl font-bold text-active  mb-8">
+            {title}
           </h1>
-          <p className="text-xl text-gray-300 font-medium">The Ultimate Gaming Experience</p>
         </div>
 
         {/* Coming Soon Text */}

@@ -1,3 +1,4 @@
+import "./style.css"
 import { Outlet } from "react-router-dom";
 import Logo from "./components/Logo";
 import bg from "../../assets/images/games/tic tac toe/bg.png";

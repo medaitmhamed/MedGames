@@ -1,7 +1,8 @@
 import { Home, RotateCcw } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const GameOver = ({ winner, resetGame }) => {
+const GameOver = ({mode, winner, p1, resetGame }) => {
+  
   return (
     <div className="absolute top-0 left-0 w-full px-2 h-svh bg-black/20 flex justify-center items-center backdrop-blur-sm
     sm:px-4">
@@ -12,14 +13,25 @@ const GameOver = ({ winner, resetGame }) => {
             <h2 className="text-2xl font-bold text-yellow-400 mb-2">
               It's a Draw!
             </h2>
-            <p className="text-gray-300">Great game, both players!</p>
+            <p className="text-gray-300">Great game{mode === "2p" ? ", both players!": ''}</p>
           </div>
         ) : (
           <div>
+            { mode === "2p"?
+            <>
             <h2 className="text-2xl font-bold mb-2">
-              Player <span className={`${winner === 'X' ? "text-blue-500" : "text-red-500"} text-stroke`}>{winner}</span> Wins! 🎉
+              {(mode === "p2" && winner?.name )?'' :"Player"} <span className={`${winner?.symbol === p1?.symbol ? "text-blue-500" : "text-red-500"} `}>{(mode === "2p" ? winner?.name: "You") || winner?.symbol}</span> Wins! 🎉
             </h2>
             <p className="text-gray-300">Congratulations!</p>
+            </>
+            :
+              <>
+              <h2 className="text-2xl font-bold mb-2">
+              <span className="text-blue-500">You </span>{( winner?.name === "Robot" ? "Lose 🥲": "Win 🎉")}
+            </h2>
+            <p className="text-gray-300">{( winner?.name === "Robot" ? "Good luck Next time": "Congratulations!")}</p>
+            </>
+            } 
           </div>
         )}
 

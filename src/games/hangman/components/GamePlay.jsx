@@ -122,7 +122,7 @@ const GamePlay = ({ mode }) => {
           <div className="w-full md:my-10">
             <Alphabets
               guessedLetters={guessedLetters}
-              handleClick={getLetterFromAlphabets}
+              getLetter={getLetterFromAlphabets}
             />
           </div>
         </div>
